@@ -314,12 +314,9 @@ userPhone.addEventListener('change',function () {
   }
 
   function showCheck(AStr) {
-    console.log(checkNumber(AStr));
-
     if(checkNumber(AStr) === true) {
       btnForm.removeAttribute('disabled')
       btnForm.classList.remove('valid')
-      console.log("123")
     } else {
       userPhone.classList.add('error')
     }
