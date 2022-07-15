@@ -303,29 +303,23 @@ let userPhone = document.querySelector('#input-phone')
 let btnForm = document.querySelector('.submit-roulette')
 
 $(document).ready(function () {
-  $("#input-phone").inputmask({"mask": "+38 (999) 999-99-99"});
+  $("#input-phone").inputmask("+38 (999) 999-99-99", {
+    "onKeyValidation": function () {
 
-});
-userPhone.addEventListener('change',function () {
+      const regEx = /[^\d\+]/g;
+      const userPhoneValue = userPhone.value
+      let userPhoneLength = userPhoneValue.replace(regEx, '')
 
-  function checkNumber(AStr) {
-    AStr = AStr.replace(/[\s\-\(\)]/g, '');
-    return AStr.match(/^((\+?3)?8)?0\d{9}$/) != null;
-  }
-
-  function showCheck(AStr) {
-    if(checkNumber(AStr) === true) {
-      btnForm.removeAttribute('disabled')
-      btnForm.classList.remove('valid')
-    } else {
-      userPhone.classList.add('error')
+      if(userPhoneLength.length <= 12) {
+        userPhone.classList.add('error')
+      } else {
+        userPhone.classList.remove('error')
+        btnForm.removeAttribute('disabled')
+        btnForm.classList.remove('valid')
+      }
     }
-  }
-
-  showCheck(userPhone.value)
-
-})
-
+  });
+});
 
 function SendForm () {
   let allAnswers = document.querySelectorAll('.chat-content-desc > .user')
@@ -371,3 +365,74 @@ function scrollDown() {
     wrap.scrollTop(desiredHeight);
   }
 }
+var defaultScope = new function () {
+  this.ready = function () {
+    $("#demolnk").click(function () {
+      $("#main").removeClass("fired");
+      $("#demolnk").addClass("fired");
+      $.get('demo.html', function (data) {
+        $('section').html(data);
+        $(":input").inputmask(undefined, {
+          oncomplete: function () {
+            var eventIdenticators = $(this).next().next(".eventIndicator").children("span");
+            $.each(eventIdenticators, function (ndx, lmnt) {
+              var $lmnt = $(lmnt);
+              if ($lmnt.hasClass("complete")) {
+                $lmnt.addClass("fired");
+              } else {
+                $lmnt.removeClass("fired");
+              }
+            });
+          },
+          onincomplete: function () {
+            var eventIdenticators = $(this).next().next(".eventIndicator").children("span");
+            $.each(eventIdenticators, function (ndx, lmnt) {
+              var $lmnt = $(lmnt);
+              if ($lmnt.hasClass("incomplete")) {
+                $lmnt.addClass("fired");
+              } else {
+                $lmnt.removeClass("fired");
+              }
+            });
+          },
+          oncleared: function () {
+            var eventIdenticators = $(this).next().next(".eventIndicator").children("span");
+            $.each(eventIdenticators, function (ndx, lmnt) {
+              var $lmnt = $(lmnt);
+              if ($lmnt.hasClass("cleared")) {
+                $lmnt.addClass("fired");
+              } else {
+                $lmnt.removeClass("fired");
+              }
+            });
+          },
+          onKeyValidation: function (result, opts) {
+            var eventIdenticators = $(this).next().next(".eventIndicator").children("span");
+            $.each(eventIdenticators, function (ndx, lmnt) {
+              var $lmnt = $(lmnt);
+              if ($lmnt.hasClass("keyvalidation")) {
+                if (result !== false) {
+                  $lmnt.addClass("fired");
+                } else {
+                  $lmnt.removeClass("fired");
+                }
+              }
+            });
+          },
+          disablePredictiveText: false
+        }).on("input", function () {
+          var eventIdenticators = $(this).next().next(".eventIndicator").children("span");
+          $.each(eventIdenticators, function (ndx, lmnt) {
+            var $lmnt = $(lmnt);
+            if ($lmnt.hasClass("input")) {
+              $lmnt.addClass("fired");
+              setTimeout(function () {
+                $lmnt.removeClass("fired");
+              }, 100);
+            }
+          });
+        });
+      });
+    });
+  };
+};

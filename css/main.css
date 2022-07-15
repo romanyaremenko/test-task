@@ -2872,8 +2872,8 @@ html.add-scroll {
   color: rgba(255, 255, 255, 0.5);
 }
 .iframe-form {
-  height: 0;
-  opacity: 0;
+  /*height: 0;*/
+  /*opacity: 0;*/
   overflow: hidden;
 }
 .iframe-form.show {
